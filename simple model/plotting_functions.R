@@ -11,17 +11,13 @@ require(ggpmisc) # adding statistics to plots
 # - a ggplot2 figure
 plot_landscape <- function(dat) {
   color_pal <- colorRampPalette(c("#56B4E9", "#009E73", "#E69F00"))
-  dat  %>% mutate(patch=case_when(
-    (patch<=round(max(patch)/3))   ~ "Pole",
-    (patch>=round(2*max(patch)/3)) ~ "Equator", 
-    TRUE                           ~ "Mid")) %>%
-    group_by(time, species, patch) %>%
-    summarise(avg_n=n, .groups="drop") %>%
+  dat  %>%
+    group_by(time, species) %>%
+    summarise(n=n, .groups="drop") %>%
     mutate(species=as.factor(species))%>%
     ggplot() + # create plot
-    aes(x=avg_n , xmin=0,xmax=avg_n,y=time, colour=species, fill=species) +
+    aes(x=n , xmin=0,xmax=n,y=time, colour=species, fill=species) +
     geom_ribbon(alpha=0.3) +
-    # panel rows: trophic level; panel columns: patch
     coord_flip() +
     scale_x_continuous(name="density", expand=c(0.02, 0.02)) +
     scale_y_continuous(name="time (years)",labels = function(x) format(x, scientific = TRUE))+
@@ -35,15 +31,12 @@ plot_landscape <- function(dat) {
 
 plot_traitLag <- function(dat,nmin) {
   color_pal <- colorRampPalette(c( "#009E73","#56B4E9", "#E69F00"))
-  dat  %>% mutate(patch=case_when(
-    (patch<=round(max(patch)/3))   ~ "Pole",
-    (patch>=round(2*max(patch)/3)) ~ "Equator", 
-    TRUE                           ~ "Mid")) %>%
-    group_by(time, species, patch) %>%
-    summarise(avg_n=Tenv-m, .groups="drop") %>%
+  dat  %>% 
+    group_by(time, species) %>%
+    summarise(lag=Tenv-m, .groups="drop") %>%
     mutate(species=as.factor(species))%>%
     ggplot() + 
-    aes(x=avg_n , xmin=0,xmax=avg_n,y=time, colour=species, fill=species) +
+    aes(x=lag , xmin=0,xmax=lag,y=time, colour=species, fill=species) +
     geom_ribbon(alpha=0.3) +
     coord_flip() +
     scale_x_continuous(name="trait lag(°C)", expand=c(0.02, 0.02)) +
