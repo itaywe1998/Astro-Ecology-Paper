@@ -67,8 +67,8 @@ List eqs(double time, NumericVector state, List pars) {
   }
   T=Temp(time,  T0, C, tE); // Vector of temperatures
   ef=rho*exp(-(T-m)*(T-m)/(2.0*sigma*sigma))/sigma;
-  g=ef*v*(T-m)/sigma;
-  h2=0.5; // Heritability
+  g=ef*v*(T-m)/(sigma*sigma);
+  h2=1; // Heritability
   // Assign calculated rates to vector of derivatives for output
   dvdt[0]=n*(ef-kappa);
   dvdt[1]=h2*g;

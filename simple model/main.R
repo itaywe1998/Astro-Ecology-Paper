@@ -3,6 +3,7 @@
 # you are welcome to redistribute it under certain conditions. for details,
 # see the GNU General Public License Agreement (in the file COPYING.txt).
 rm(list = ls())
+setwd("~/Astro-Ecology-Paper/simple model")
 # ---------------------------- import statements --------------------------------
 suppressPackageStartupMessages({
   suppressWarnings({
@@ -16,7 +17,7 @@ suppressPackageStartupMessages({
     library(readr)
     library(dplyr)
     source("./plotting_functions.R") # various functions for plotting final data
-    sourceCpp("./model.cpp") # compile external C functions
+    sourceCpp("model.cpp") # compile external C functions
     source("./input.R")
   })
 })
@@ -45,7 +46,7 @@ organize_data <- function(dat, times, pars,Tenv) {
 }
 # ------------------------------- initial conditions -----------------------------------
 ninit <- 1 # reserve memory for initial densities
-muinit <- Tmin # initial trait means
+muinit <- T0 # initial trait means
 ic <- c(ninit, muinit) # merge initial conditions into a vector
 pars <- list(rho=rho, kappa=kappa,v=v, nmin=nmin, sigma=sigma,T0=T0,tE=tE,C=C)
 # -------------------------- integrate ODEs -----------------------------------
@@ -62,7 +63,7 @@ original_tE <- tE
 ts <-seq(0, tE, by=step)
 Tenv <- ts
 for (i in 1:length(ts)) {
-  Tenv[i] <- Temp(ts[i],Tmin,C,tE)
+  Tenv[i] <- Temp(ts[i],T0,C,tE)
 }
 tryCatch({results <-ode(y=ic, times=seq(0, tE, by=step), func=eqs, parms=pars,
                         method = "bdf",atol  = at, rtol = rt, maxsteps = maxsteps)
@@ -89,7 +90,8 @@ finally = {
 suppressWarnings(write_csv(dat, path=outfile)) # save data to specified file
 pn<-plot_landscape(dat %>% filter(patch %in% c(1)))
 pm<-plot_traitLag(dat %>% filter(patch %in% c(1)),nmin)
-grid.arrange(pn, pm, ncol=2)
+p<-grid.arrange(pn, pm, ncol=2)
+print(p)
 print("R total Runtime")
 print(Sys.time()-start)
 save.image(file = workspace) # save workspace to specified file
