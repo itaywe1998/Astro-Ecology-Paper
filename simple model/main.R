@@ -16,7 +16,7 @@ suppressPackageStartupMessages({
     library(readr)
     library(dplyr)
     source("./plotting_functions.R") # various functions for plotting final data
-    sourceCpp("./rhs_eval.cpp") # compile external C functions
+    sourceCpp("./model.cpp") # compile external C functions
     source("./input.R")
   })
 })
@@ -47,7 +47,7 @@ organize_data <- function(dat, times, pars,Tenv) {
 ninit <- 1 # reserve memory for initial densities
 muinit <- Tmin # initial trait means
 ic <- c(ninit, muinit) # merge initial conditions into a vector
-pars <- list(rho=rho, kappa=kappa,v=v, nmin=nmin, sigma=sigma,Tmin=Tmin,tE=tE,C=C)
+pars <- list(rho=rho, kappa=kappa,v=v, nmin=nmin, sigma=sigma,T0=T0,tE=tE,C=C)
 # -------------------------- integrate ODEs -----------------------------------
 # consider changing relative (rtol) and absolute (atol) solver tolerances
 # for quick/accurate solution trade-off.
