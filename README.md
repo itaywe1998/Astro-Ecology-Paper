@@ -9,4 +9,7 @@ File Structure:
 2.
 
 The computational speed relies on cpp doing the hard work, while the R main script is only there for data preparation and visualization using the ggplot2 plotting functions.
-Pay attention that stiff ODE solver updates step size on the go,and so calls for rhs_eval are very frequent for most. For that reason, the smaller memory passed to rhs_eval as arguments, the better. For pre-computed T configurations like the vZLK, keep the T vector as small as possible. For instance , 200 T data points will result in 1-10 minutes run, in accordance to Akesson original performance.  
+Pay attention that stiff ODE solver updates step size on the go,and so calls for rhs_eval are very frequent for most. 
+For that reason, the smaller memory passed to rhs_eval as arguments, the better. 
+For pre-computed T configurations like the vZLK, keep the T vector as small as possible. 
+For instance , 200 T data points will result in 1-10 minutes run, in accordance to Akesson original performance.  
