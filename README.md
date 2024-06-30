@@ -1,9 +1,3 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
-
 # Astro-Ecology-Paper
 
 This rep bears the source code required to reconstruct results shown on
